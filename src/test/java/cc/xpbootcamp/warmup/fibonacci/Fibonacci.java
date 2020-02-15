@@ -7,11 +7,10 @@ public class Fibonacci {
         if(position < 1)
             throw new IllegalArgumentException();
 
-        ArrayList<Integer> fibs = new ArrayList<>();
-        fibs.add(0);
-        fibs.add(1);
-        fibs.add(fibs.get(1)+fibs.get(0));
+        if (position == 1 || position == 2)
+            return 1;
+        else
+            return calculate(position-1) + calculate(position-2);
 
-        return fibs.get(position);
     }
 }

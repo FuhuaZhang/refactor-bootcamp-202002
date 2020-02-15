@@ -23,6 +23,11 @@ public class FibonacciTest {
     void should_return_1_when_calculate_given_position_2() {
         int result = fibonacci.calculate(2);
         assertEquals(1, result);
+    }
 
+    @Test
+    void should_return_2_when_calculate_given_position_3() {
+        int result = fibonacci.calculate(3);
+        assertEquals(2, result);
     }
 }
