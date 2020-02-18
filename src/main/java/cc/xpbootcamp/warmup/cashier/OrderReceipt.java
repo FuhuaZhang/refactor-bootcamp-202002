@@ -1,7 +1,11 @@
 package cc.xpbootcamp.warmup.cashier;
 
+import java.util.Date;
+
 public class OrderReceipt {
+    public static final String RECEIPT_HEADER_MARKET_NAME = "======老王超市，值得信赖======\n";
     private Order order;
+    private Date date = new Date();
 
     public OrderReceipt(Order order) {
         this.order = order;
@@ -33,12 +37,10 @@ public class OrderReceipt {
     }
 
     private void generateHeader(StringBuilder output) {
-        output.append("======Printing Orders======\n");
+        output.append(RECEIPT_HEADER_MARKET_NAME);
 
-//        output.append("Date - " + order.getDate();
-        output.append(order.getCustomerName());
-        output.append(order.getCustomerAddress());
-//        output.append(order.getCustomerLoyaltyNumber());
+        // TODO will fix the date format later
+        output.append(this.getDate());
     }
 
     private void printLineItemsDetails(StringBuilder output, LineItem lineItem) {
@@ -50,5 +52,9 @@ public class OrderReceipt {
         output.append('\t');
         output.append(lineItem.totalAmount());
         output.append('\n');
+    }
+
+    public Date getDate() {
+        return date;
     }
 }
