@@ -10,28 +10,35 @@ public class OrderReceipt {
     public String printReceipt() {
         StringBuilder output = new StringBuilder();
 
+        generateHeader(output);
+
+        generateLineItems(output);
+
+        generateFooter(output);
+
+        return output.toString();
+    }
+
+    private void generateFooter(StringBuilder output) {
+        double totalAmount = order.getTotalAmount();
+        double totalSalesTax = order.getTotalSalesTax();
+        output.append("Sales Tax").append('\t').append(totalSalesTax);
+        output.append("Total Amount").append('\t').append(totalAmount);
+    }
+
+    private void generateLineItems(StringBuilder output) {
+        for (LineItem lineItem : order.getLineItems()) {
+            printLineItemsDetails(output, lineItem);
+        }
+    }
+
+    private void generateHeader(StringBuilder output) {
         output.append("======Printing Orders======\n");
 
 //        output.append("Date - " + order.getDate();
         output.append(order.getCustomerName());
         output.append(order.getCustomerAddress());
 //        output.append(order.getCustomerLoyaltyNumber());
-
-        double totalSalesTax = 0d;
-        double totalAmount = 0d;
-        for (LineItem lineItem : order.getLineItems()) {
-            printLineItemsDetails(output, lineItem);
-
-            double salesTax = lineItem.totalAmount() * .10;
-            totalSalesTax += salesTax;
-
-            totalAmount += lineItem.totalAmount() + salesTax;
-        }
-
-        output.append("Sales Tax").append('\t').append(totalSalesTax);
-
-        output.append("Total Amount").append('\t').append(totalAmount);
-        return output.toString();
     }
 
     private void printLineItemsDetails(StringBuilder output, LineItem lineItem) {
