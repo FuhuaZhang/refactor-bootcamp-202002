@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static cc.xpbootcamp.warmup.cashier.OrderReceipt.RECEIPT_HEADER_MARKET_NAME;
+import static cc.xpbootcamp.warmup.cashier.OrderReceipt.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 
@@ -36,8 +36,7 @@ class OrderReceiptTest {
         assertThat(output, containsString("milk\t10.0\t2\t20.0\n"));
         assertThat(output, containsString("biscuits\t5.0\t5\t25.0\n"));
         assertThat(output, containsString("chocolate\t20.0\t1\t20.0\n"));
-        assertThat(output, containsString("Sales Tax\t6.5"));
-        assertThat(output, containsString("Total Amount\t71.5"));
+        assertThat(output, containsString(SALES_TAX+"\t6.5"));
+        assertThat(output, containsString(TOTAL_AMOUNT+"\t71.5"));
     }
-
 }
