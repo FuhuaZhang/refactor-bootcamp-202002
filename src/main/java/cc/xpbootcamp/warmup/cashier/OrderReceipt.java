@@ -18,6 +18,11 @@ public class OrderReceipt {
         this.order = order;
     }
 
+    public OrderReceipt(Order order, Date date) {
+        this.order = order;
+        this.date = date;
+    }
+
     public String printReceipt() {
         StringBuilder output = new StringBuilder();
 
