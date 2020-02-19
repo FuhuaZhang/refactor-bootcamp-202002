@@ -20,6 +20,7 @@ public class OrderReceipt {
 
     public OrderReceipt(Order order, Date date) {
         this.order = order;
+        this.order.setSubTotal();
         this.date = date;
     }
 
@@ -36,17 +37,14 @@ public class OrderReceipt {
     }
 
     private void generateFooter(StringBuilder output) {
-        order.setSubTotal();
-        double totalSalesTax = order.getTotalSalesTax();
-        double wednesdayDiscount = order.getWednesdayDiscount(date);
-        double total = order.getTotal(date);
+        output.append(SALES_TAX).append('\t').append(order.getTotalSalesTax()).append("\n");
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE", Locale.CHINESE);
-        output.append(SALES_TAX).append('\t').append(totalSalesTax).append("\n");
         if (dateFormat.format(date).equals(WEDNESDAY)) {
-            output.append(DISCOUNT).append('\t').append(wednesdayDiscount).append("\n");
+            output.append(DISCOUNT).append('\t').append(order.getWednesdayDiscount(date)).append("\n");
         }
-        output.append(TOTAL_AMOUNT).append("\t").append(total).append("\n");
+
+        output.append(TOTAL_AMOUNT).append("\t").append(order.getTotal(date)).append("\n");
     }
 
     private void generateLineItems(StringBuilder output) {
