@@ -19,7 +19,7 @@ class OrderReceiptTest {
 
 
         assertThat(output, containsString(RECEIPT_HEADER_MARKET_NAME));
-        assertThat(output, containsString(receipt.getDate().toString()));
+        assertThat(output, containsString(receipt.getDate()));
     }
 
     @Test

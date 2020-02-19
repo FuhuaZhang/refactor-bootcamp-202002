@@ -1,6 +1,8 @@
 package cc.xpbootcamp.warmup.cashier;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class OrderReceipt {
     public static final String RECEIPT_HEADER_MARKET_NAME = "======老王超市，值得信赖======\n";
@@ -38,9 +40,8 @@ public class OrderReceipt {
 
     private void generateHeader(StringBuilder output) {
         output.append(RECEIPT_HEADER_MARKET_NAME);
-
-        // TODO will fix the date format later
         output.append(this.getDate());
+        output.append('\n');
     }
 
     private void printLineItemsDetails(StringBuilder output, LineItem lineItem) {
@@ -54,7 +55,8 @@ public class OrderReceipt {
         output.append('\n');
     }
 
-    public Date getDate() {
-        return date;
+    public String getDate() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年mm月dd日, EEEE", Locale.CHINESE);
+        return dateFormat.format(date);
     }
 }
