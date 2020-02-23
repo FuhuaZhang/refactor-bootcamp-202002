@@ -1,9 +1,11 @@
 package cc.xpbootcamp.warmup.cashier;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 public class OrderReceipt {
     public static final String RECEIPT_HEADER_MARKET_NAME = "======老王超市，值得信赖======\n";
@@ -27,51 +29,28 @@ public class OrderReceipt {
     }
 
     public String printReceipt() {
-        StringBuilder output = new StringBuilder();
-
-        generateHeader(output);
-
-        generateLineItems(output);
-
-        generateFooter(output);
-
-        return output.toString();
+        return generateHeader() + generateLineItems() + generateFooter();
     }
 
-    private void generateFooter(StringBuilder output) {
-        output.append(CUTTING_LINE);
-        output.append(SALES_TAX).append(": ").append(formatPrice(order.getTotalSalesTax())).append("\n");
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE", Locale.CHINESE);
-        if (dateFormat.format(date).equals(WEDNESDAY)) {
-            output.append(DISCOUNT).append(": ").append(formatPrice(order.getWednesdayDiscount(date))).append("\n");
-        }
-
-        output.append(TOTAL_AMOUNT).append(": ").append(formatPrice(order.getTotal(date))).append("\n");
+    private String generateFooter() {
+        return CUTTING_LINE + "\n"
+                + SALES_TAX + ": " + formatPrice(order.getTotalSalesTax())
+                + (new SimpleDateFormat("EEEE", Locale.CHINESE).format(date).equals(WEDNESDAY) ? DISCOUNT + ": " + formatPrice(order.getWednesdayDiscount(date)) + "\n" : "")
+                + TOTAL_AMOUNT + ": " + formatPrice(order.getTotal(date));
     }
 
-    private void generateLineItems(StringBuilder output) {
-        for (LineItem lineItem : order.getLineItems()) {
-            printLineItemsDetails(output, lineItem);
-        }
+    private String generateLineItems() {
+        return order.getLineItems().stream().map(this::printLineItemsDetails).collect(Collectors.joining());
     }
 
-    private void generateHeader(StringBuilder output) {
-        output.append(RECEIPT_HEADER_MARKET_NAME);
-        output.append("\n");
-        output.append(this.getDate());
-        output.append("\n");
+    private String generateHeader() {
+        return RECEIPT_HEADER_MARKET_NAME + "\n" + this.getDate() + "\n";
     }
 
-    private void printLineItemsDetails(StringBuilder output, LineItem lineItem) {
-        output.append(lineItem.getDescription());
-        output.append(", ");
-        output.append(formatPrice(lineItem.getPrice()));
-        output.append(" x ");
-        output.append(lineItem.getQuantity());
-        output.append(", ");
-        output.append(formatPrice(lineItem.totalAmount()));
-        output.append("\n");
+    private String printLineItemsDetails(LineItem lineItem) {
+        return lineItem.getDescription() + ", "
+                + formatPrice(lineItem.getPrice()) + " x " + lineItem.getQuantity() + ", "
+                + formatPrice(lineItem.totalAmount()) + "\n";
     }
 
     public String getDate() {
