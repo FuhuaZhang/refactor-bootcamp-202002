@@ -13,7 +13,7 @@ import static org.hamcrest.Matchers.containsString;
 class OrderReceiptTest {
     @Test
     void should_print_header_correctly() {
-        Order order = new Order("Mr X", "Chicago, 60601", new ArrayList<LineItem>());
+        Order order = new Order(new ArrayList<LineItem>());
         OrderReceipt receipt = new OrderReceipt(order);
 
         String output = receipt.printReceipt();
@@ -30,7 +30,7 @@ class OrderReceiptTest {
             add(new LineItem("biscuits", 5.0, 5));
             add(new LineItem("chocolate", 20.0, 1));
         }};
-        OrderReceipt receipt = new OrderReceipt(new Order(null, null, lineItems), new SimpleDateFormat("EEEE", Locale.CHINESE).parse("星期四"));
+        OrderReceipt receipt = new OrderReceipt(new Order(lineItems), new SimpleDateFormat("EEEE", Locale.CHINESE).parse("星期四"));
 
         String output = receipt.printReceipt();
 
@@ -46,7 +46,7 @@ class OrderReceiptTest {
             add(new LineItem("biscuits", 5.0, 5));
             add(new LineItem("chocolate", 20.0, 1));
         }};
-        OrderReceipt receipt = new OrderReceipt(new Order(null, null, lineItems), new SimpleDateFormat("EEEE", Locale.CHINESE).parse("星期四"));
+        OrderReceipt receipt = new OrderReceipt(new Order(lineItems), new SimpleDateFormat("EEEE", Locale.CHINESE).parse("星期四"));
 
         String output = receipt.printReceipt();
 
@@ -62,7 +62,7 @@ class OrderReceiptTest {
             add(new LineItem("biscuits", 5.0, 5));
             add(new LineItem("chocolate", 20.0, 1));
         }};
-        OrderReceipt receipt = new OrderReceipt(new Order(null, null, lineItems), new SimpleDateFormat("EEEE", Locale.CHINESE).parse(WEDNESDAY));
+        OrderReceipt receipt = new OrderReceipt(new Order(lineItems), new SimpleDateFormat("EEEE", Locale.CHINESE).parse(WEDNESDAY));
 
         String output = receipt.printReceipt();
 

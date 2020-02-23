@@ -10,23 +10,11 @@ import static cc.xpbootcamp.warmup.cashier.OrderReceipt.WEDNESDAY;
 public class Order {
     public static final double TAX_RATE = 0.10;
     public static final double WEDNESDAY_DISCOUNT = 0.02;
-    String customerName;
-    String address;
     List<LineItem> lineItems;
     double subTotal;
 
-    public Order(String customerName, String address, List<LineItem> lineItems) {
-        this.customerName = customerName;
-        this.address = address;
+    public Order(List<LineItem> lineItems) {
         this.lineItems = lineItems;
-    }
-
-    public String getCustomerName() {
-        return customerName;
-    }
-
-    public String getCustomerAddress() {
-        return address;
     }
 
     public List<LineItem> getLineItems() {
