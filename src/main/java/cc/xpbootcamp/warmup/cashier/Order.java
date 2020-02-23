@@ -33,7 +33,7 @@ public class Order {
         return getSubTotal() * TAX_RATE;
     }
 
-    double getWednesdayDiscount() {
+    double getDiscount() {
         if (DATE_FORMAT.format(this.getDate()).contains(WEDNESDAY))
             return getSubTotal() * WEDNESDAY_DISCOUNT;
         else
@@ -41,6 +41,6 @@ public class Order {
     }
 
     double getTotal() {
-        return getTotalSalesTax() + getSubTotal() - getWednesdayDiscount();
+        return getTotalSalesTax() + getSubTotal() - getDiscount();
     }
 }

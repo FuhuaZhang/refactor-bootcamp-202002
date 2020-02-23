@@ -28,7 +28,7 @@ public class OrderReceipt {
     private String generateFooter() {
         return CUTTING_LINE + "\n"
                 + SALES_TAX + ": " + formatPrice(order.getTotalSalesTax()) + "\n"
-                + (DATE_FORMAT.format(order.getDate()).contains(WEDNESDAY) ? DISCOUNT + ": " + formatPrice(order.getWednesdayDiscount()) + "\n" : "")
+                + (DATE_FORMAT.format(order.getDate()).contains(WEDNESDAY) ? DISCOUNT + ": " + formatPrice(order.getDiscount()) + "\n" : "")
                 + TOTAL_AMOUNT + ": " + formatPrice(order.getTotal()) + "\n";
     }
 
