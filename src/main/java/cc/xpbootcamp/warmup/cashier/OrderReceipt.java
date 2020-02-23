@@ -1,9 +1,8 @@
 package cc.xpbootcamp.warmup.cashier;
 
-import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
@@ -14,18 +13,12 @@ public class OrderReceipt {
     public static final String TOTAL_AMOUNT = "总价";
     public static final String WEDNESDAY = "星期三";
     public static final String CUTTING_LINE = "-----------------------------------";
+    public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy年M月d日，EEEE", Locale.CHINA);
 
     private Order order;
-    private Date date = new Date();
 
     public OrderReceipt(Order order) {
         this.order = order;
-    }
-
-    public OrderReceipt(Order order, Date date) {
-        this.order = order;
-        this.order.setSubTotal();
-        this.date = date;
     }
 
     public String printReceipt() {
@@ -34,9 +27,9 @@ public class OrderReceipt {
 
     private String generateFooter() {
         return CUTTING_LINE + "\n"
-                + SALES_TAX + ": " + formatPrice(order.getTotalSalesTax())
-                + (new SimpleDateFormat("EEEE", Locale.CHINESE).format(date).equals(WEDNESDAY) ? DISCOUNT + ": " + formatPrice(order.getWednesdayDiscount(date)) + "\n" : "")
-                + TOTAL_AMOUNT + ": " + formatPrice(order.getTotal(date));
+                + SALES_TAX + ": " + formatPrice(order.getTotalSalesTax()) + "\n"
+                + (DATE_FORMAT.format(order.getDate()).contains(WEDNESDAY) ? DISCOUNT + ": " + formatPrice(order.getWednesdayDiscount()) + "\n" : "")
+                + TOTAL_AMOUNT + ": " + formatPrice(order.getTotal()) + "\n";
     }
 
     private String generateLineItems() {
@@ -44,7 +37,8 @@ public class OrderReceipt {
     }
 
     private String generateHeader() {
-        return RECEIPT_HEADER_MARKET_NAME + "\n" + this.getDate() + "\n";
+        System.out.println(order.getDate().toString());
+        return RECEIPT_HEADER_MARKET_NAME + "\n" + this.formatDate(order.getDate()) + "\n";
     }
 
     private String printLineItemsDetails(LineItem lineItem) {
@@ -53,9 +47,8 @@ public class OrderReceipt {
                 + formatPrice(lineItem.totalAmount()) + "\n";
     }
 
-    public String getDate() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年mm月dd日, EEEE", Locale.CHINESE);
-        return dateFormat.format(date);
+    public String formatDate(LocalDate date) {
+        return DATE_FORMAT.format(date);
     }
 
     public String formatPrice(double price) {

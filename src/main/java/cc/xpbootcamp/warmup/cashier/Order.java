@@ -1,20 +1,26 @@
 package cc.xpbootcamp.warmup.cashier;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Locale;
 
+import static cc.xpbootcamp.warmup.cashier.OrderReceipt.DATE_FORMAT;
 import static cc.xpbootcamp.warmup.cashier.OrderReceipt.WEDNESDAY;
 
 public class Order {
     public static final double TAX_RATE = 0.10;
     public static final double WEDNESDAY_DISCOUNT = 0.02;
-    List<LineItem> lineItems;
-    double subTotal;
+    private List<LineItem> lineItems;
+    private double subTotal;
+    private LocalDate date;
 
-    public Order(List<LineItem> lineItems) {
+    public Order(List<LineItem> lineItems, LocalDate date) {
         this.lineItems = lineItems;
+        this.date = date;
+        this.subTotal = setSubTotal();
+    }
+
+    public LocalDate getDate() {
+        return date;
     }
 
     public List<LineItem> getLineItems() {
@@ -25,25 +31,22 @@ public class Order {
         return getSubTotal() * TAX_RATE;
     }
 
-    void setSubTotal() {
-        for (LineItem lineItem : getLineItems()) {
-            subTotal += lineItem.totalAmount();
-        }
+    double setSubTotal() {
+        return lineItems.stream().mapToDouble(LineItem::totalAmount).sum();
     }
 
     public double getSubTotal() {
         return subTotal;
     }
 
-    double getWednesdayDiscount(Date date) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE", Locale.CHINESE);
-        if (dateFormat.format(date).equals(WEDNESDAY))
+    double getWednesdayDiscount() {
+        if (DATE_FORMAT.format(this.getDate()).contains(WEDNESDAY))
             return getSubTotal() * WEDNESDAY_DISCOUNT;
         else
             return 0d;
     }
 
-    double getTotal(Date date) {
-        return getTotalSalesTax() + getSubTotal() - getWednesdayDiscount(date);
+    double getTotal() {
+        return getTotalSalesTax() + getSubTotal() - getWednesdayDiscount();
     }
 }
