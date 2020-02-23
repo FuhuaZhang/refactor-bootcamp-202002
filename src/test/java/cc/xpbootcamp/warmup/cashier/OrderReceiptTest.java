@@ -19,12 +19,12 @@ class OrderReceiptTest {
         String output = receipt.printReceipt();
 
 
-        assertThat(output, containsString(RECEIPT_HEADER_MARKET_NAME));
-        assertThat(output, containsString(receipt.getDate()));
+        assertThat(output, containsString(RECEIPT_HEADER_MARKET_NAME + "\n"));
+        assertThat(output, containsString(receipt.getDate() + "\n"));
     }
 
     @Test
-    public void shouldPrintLineItemAndSalesTaxInformation() throws ParseException {
+    public void should_print_line_items_with_two_decimal_price_format() throws ParseException {
         List<LineItem> lineItems = new ArrayList<LineItem>() {{
             add(new LineItem("milk", 10.0, 2));
             add(new LineItem("biscuits", 5.0, 5));
@@ -34,11 +34,25 @@ class OrderReceiptTest {
 
         String output = receipt.printReceipt();
 
-        assertThat(output, containsString("milk\t10.0\t2\t20.0\n"));
-        assertThat(output, containsString("biscuits\t5.0\t5\t25.0\n"));
-        assertThat(output, containsString("chocolate\t20.0\t1\t20.0\n"));
-        assertThat(output, containsString(SALES_TAX+"\t6.5"));
-        assertThat(output, containsString(TOTAL_AMOUNT+"\t71.5"));
+        assertThat(output, containsString("milk, 10.00 x 2, 20.00\n"));
+        assertThat(output, containsString("biscuits, 5.00 x 5, 25.00\n"));
+        assertThat(output, containsString("chocolate, 20.00 x 1, 20.00\n"));
+    }
+
+    @Test
+    public void should_print_sale_taxes_and_total_price() throws ParseException {
+        List<LineItem> lineItems = new ArrayList<LineItem>() {{
+            add(new LineItem("milk", 10.0, 2));
+            add(new LineItem("biscuits", 5.0, 5));
+            add(new LineItem("chocolate", 20.0, 1));
+        }};
+        OrderReceipt receipt = new OrderReceipt(new Order(null, null, lineItems), new SimpleDateFormat("EEEE", Locale.CHINESE).parse("星期四"));
+
+        String output = receipt.printReceipt();
+
+        assertThat(output, containsString(CUTTING_LINE));
+        assertThat(output, containsString(SALES_TAX+": 6.50"));
+        assertThat(output, containsString(TOTAL_AMOUNT+": 71.50"));
     }
 
     @Test
@@ -52,11 +66,9 @@ class OrderReceiptTest {
 
         String output = receipt.printReceipt();
 
-        assertThat(output, containsString("milk\t10.0\t2\t20.0\n"));
-        assertThat(output, containsString("biscuits\t5.0\t5\t25.0\n"));
-        assertThat(output, containsString("chocolate\t20.0\t1\t20.0\n"));
-        assertThat(output, containsString(SALES_TAX+"\t6.5"));
-        assertThat(output, containsString(DISCOUNT+"\t1.3"));
-        assertThat(output, containsString(TOTAL_AMOUNT+"\t70.2"));
+        assertThat(output, containsString(CUTTING_LINE));
+        assertThat(output, containsString(SALES_TAX+": 6.50"));
+        assertThat(output, containsString(DISCOUNT+": 1.30"));
+        assertThat(output, containsString(TOTAL_AMOUNT+": 70.20"));
     }
 }
